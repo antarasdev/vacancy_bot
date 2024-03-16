@@ -1,1 +1,9 @@
-BOT_TOKEN = '6051272220:AAGDZEshw73jM37QvF9UKkejTRS44RMNv_4'
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+ADMIN_ID = os.getenv("ADMIN_ID")
+CHAT_ID = os.getenv("CHAT_ID")
