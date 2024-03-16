@@ -2,7 +2,6 @@ name: Vacancy_bot workflow
 
 on: [push]
 
-
 jobs:
   build_and_push_backend_to_docker_hub:
     name: Pushing backend image to Docker Hub
@@ -20,9 +19,10 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/build-push-action@v2
         with:
-          context: .:/vacancy_bot
+          context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
+
 #  deploy:
 #    name: Deploying on remote server
 #    runs-on: ubuntu-latest
