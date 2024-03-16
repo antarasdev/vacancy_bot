@@ -23,7 +23,6 @@ jobs:
           context: ./vacancy_bot
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
-
 #  deploy:
 #    name: Deploying on remote server
 #    runs-on: ubuntu-latest
