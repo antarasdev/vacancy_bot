@@ -4,10 +4,10 @@ import time
 from aiogram import types, Dispatcher, F
 from aiogram.filters.command import Command
 
-from vacancy_bot.constants import THREAD_ID
-from vacancy_bot.config import CHAT_ID
-from bot import bot
-from vacancy_bot.keyboards import get_start_keyboard
+from constants import THREAD_ID
+from config import CHAT_ID
+from vacancy_bot.bot import bot
+from keyboards import get_start_keyboard
 
 dp = Dispatcher()
 last_vacancy_sent = 0

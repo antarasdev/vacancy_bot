@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  vacancy_bot:
+    build: .
+    container_name: vacancy_bot
+    restart: always
+    volumes:
+      - ./vacancy_bot
+    environment:
+      - PYTHONUNBUFFERED=1
