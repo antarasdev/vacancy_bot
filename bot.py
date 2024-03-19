@@ -2,11 +2,12 @@ import logging
 import asyncio
 from aiogram import Bot, Dispatcher
 
+from vacancy_bot.my_bot.config import config
 from vacancy_bot.my_bot import handlers
-from vacancy_bot.my_bot.config import BOT_TOKEN
+
 
 logging.basicConfig(level=logging.DEBUG)
-bot = Bot(token=BOT_TOKEN)
+bot = Bot(token=config.bot_token.get_secret_value())
 
 
 async def main():

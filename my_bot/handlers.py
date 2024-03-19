@@ -7,7 +7,7 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import ReplyKeyboardRemove
 
 from .constants import THREAD_KEYWORDS, RULES_TEXT, EXAMPLE
-from .config import CHAT_ID
+from .config import config
 
 from .keyboards import main_keyboard
 from ..bot import bot
@@ -82,7 +82,8 @@ async def process_vacancy(message: types.Message, state: FSMContext):
                             [position] + list(map(str, responsibilities)) +
                             [salary] + contacts)
                 )
-            await bot.send_message(chat_id=CHAT_ID, message_thread_id=message_thread_id, text=formatted_vacancy)
+            await bot.send_message(chat_id=config.chat_id.get_secret_value(),
+                                   message_thread_id=message_thread_id, text=formatted_vacancy)
             last_vacancy_sent = current_time
             await state.clear()
             await message.answer("Вакансия успешно опубликована.", reply_markup=main_keyboard())
