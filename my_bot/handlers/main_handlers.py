@@ -6,14 +6,14 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import ReplyKeyboardRemove
 
-from .constants import THREAD_KEYWORDS, RULES_TEXT, EXAMPLE
-from .config import config
-
-from .keyboards import main_keyboard
-from ..bot import bot
+from vacancy_bot.my_bot.constants import THREAD_KEYWORDS, RULES_TEXT, EXAMPLE
+from vacancy_bot.my_bot.config import config
+from vacancy_bot.my_bot.keyboards import main_keyboard
+from vacancy_bot.bot import bot
 
 
 router = Router()
+
 last_vacancy_sent = 0
 
 
@@ -41,11 +41,8 @@ async def send_rules(message: types.Message):
 
 @router.message(lambda message: message.text == '✅Опубликовать вакансию')
 async def publish_vacancy(message: types.Message, state: FSMContext):
-    data = await state.get_data()
-    data['vacancy_text'] = message.text
     text = 'Напиши текст вашей вакансии по шаблону'
     await message.answer(text)
-    await state.update_data(data)
     await state.set_state(VacancyForm.ConfirmVacancy)
 
 
@@ -53,8 +50,8 @@ async def publish_vacancy(message: types.Message, state: FSMContext):
 async def process_vacancy(message: types.Message, state: FSMContext):
     global last_vacancy_sent
     current_time = asyncio.get_event_loop().time()
-    vacancy_text = message.text
-    vacancy_parts = vacancy_text.split('\n\n')
+    data = message.text
+    vacancy_parts = data.split('\n\n')
 
     hashtags = ([part for part in vacancy_parts if part.startswith("#")])
     name_organisation = [part for part in vacancy_parts if 'Название фирмы' in part]
@@ -66,7 +63,7 @@ async def process_vacancy(message: types.Message, state: FSMContext):
     message_thread_id = None
     for thread_id, keywords in THREAD_KEYWORDS.items():
         for keyword in keywords:
-            if keyword.lower() in vacancy_text.lower() or any(
+            if keyword.lower() in data.lower() or any(
                     keyword.lower() in part.lower() for part in vacancy_parts):
                 message_thread_id = thread_id
                 break
