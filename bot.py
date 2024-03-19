@@ -2,8 +2,8 @@ import logging
 import asyncio
 from aiogram import Bot, Dispatcher
 
-from vacancy_bot.my_bot.config import config
-from vacancy_bot.my_bot.handlers import main_handlers
+from .my_bot.config import config
+from .my_bot.handlers import main_handlers
 
 
 logging.basicConfig(level=logging.DEBUG)
