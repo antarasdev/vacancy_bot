@@ -5,10 +5,10 @@ from aiogram.filters.command import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 
-from .my_bot.constants import THREAD_KEYWORDS, RULES_TEXT, EXAMPLE
-from .my_bot.config import config
-from .my_bot.keyboards import main_keyboard
-from .bot import bot
+from my_bot.constants import THREAD_KEYWORDS, RULES_TEXT, EXAMPLE
+from my_bot.config import config
+from my_bot.keyboards import main_keyboard
+from bot import bot
 
 
 router = Router()
