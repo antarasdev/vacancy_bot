@@ -10,6 +10,9 @@
 #     "Финансы, Бухгалтерия": 4,
 #     "Розничная торговля": 5
 # }
+from aiogram import types
+
+PRICE = types.LabeledPrice(label='Настоящая Машина Времени', amount=4200000)
 
 THREAD_KEYWORDS = {
     44: [
@@ -150,3 +153,5 @@ EXAMPLE = ('''
 
 Копируйте и заполняйте.
 ''')
+
+PAYMENTS = '381764678:TEST:80807'

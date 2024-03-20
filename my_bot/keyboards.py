@@ -13,11 +13,10 @@ def main_keyboard() -> ReplyKeyboardMarkup:
     return keyboard.as_markup(resize_keyboard=True)
 
 
-def profile_keyboard() -> ReplyKeyboardMarkup:
+def payment_keyboard() -> ReplyKeyboardMarkup:
     keyboard = ReplyKeyboardBuilder()
 
-    keyboard.add(types.KeyboardButton(text='Да'))
-    keyboard.add(types.KeyboardButton(text='Нет'))
+    keyboard.add(types.KeyboardButton(text="Открыть оплату", pay=True))
 
     keyboard.adjust(2)
     return keyboard.as_markup(resize_keyboard=True)

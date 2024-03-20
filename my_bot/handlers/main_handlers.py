@@ -9,8 +9,10 @@ from aiogram.fsm.state import State, StatesGroup
 
 from bot import bot
 from my_bot.config import config
-from my_bot.constants import EXAMPLE, RULES_TEXT, THREAD_KEYWORDS
-from my_bot.keyboards import main_keyboard
+from my_bot.constants import EXAMPLE, RULES_TEXT, THREAD_KEYWORDS, PRICE
+from my_bot.keyboards import main_keyboard, payment_keyboard
+
+from vacancy_bot.my_bot.constants import PAYMENTS
 
 router = Router()
 
@@ -25,6 +27,23 @@ class VacancyForm(StatesGroup):
 async def start(message: types.Message):
     text = "Добро пожаловать! Я могу помочь вам опубликовать вакансии"
     await message.answer(text, reply_markup=main_keyboard())
+
+
+@router.message(Command("pay"))
+async def process_payment(message: types.Message):
+    if PAYMENTS.split(':')[1] == 'TEST':
+        await bot.send_message(message.chat.id, text='ОПЛАТА СУКА РАБОТАЙ')
+        await bot.send_invoice(
+            message.chat.id,
+            title='Тайтл',
+            description='Описание',
+            provider_token=PAYMENTS,
+            currency='rub',
+            is_flexible=False,  # True если конечная цена зависит от способа доставки
+            prices=[PRICE],
+            start_parameter='time-machine-example',
+            payload='some-invoice-payload-for-our-internal-use'
+        )
 
 
 @router.message(lambda message: message.text == '📑 Шаблон\nвакансии')

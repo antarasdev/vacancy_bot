@@ -7,13 +7,16 @@ from my_bot.config import config
 from my_bot.handlers import main_handlers
 from my_bot.schedulers import schedule_jobs
 
+
 logging.basicConfig(level=logging.DEBUG)
 bot = Bot(token=config.bot_token.get_secret_value())
 
 
 async def main():
     dp = Dispatcher()
-    dp.include_routers(main_handlers.router)
+    dp.include_routers(
+        main_handlers.router
+    )
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
