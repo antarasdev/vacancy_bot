@@ -1,15 +1,16 @@
 import asyncio
 
-from aiogram import types, Router, F
+import aioschedule
+from aiogram import F, Router, types
+from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters.command import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import StatesGroup, State
+from aiogram.fsm.state import State, StatesGroup
 
-from my_bot.constants import THREAD_KEYWORDS, RULES_TEXT, EXAMPLE
-from my_bot.config import config
-from my_bot.keyboards import main_keyboard
 from bot import bot
-
+from my_bot.config import config
+from my_bot.constants import EXAMPLE, RULES_TEXT, THREAD_KEYWORDS
+from my_bot.keyboards import main_keyboard
 
 router = Router()
 
@@ -78,9 +79,13 @@ async def process_vacancy(message: types.Message, state: FSMContext):
                             [position] + list(map(str, responsibilities)) +
                             [salary] + contacts)
                 )
-            await bot.send_message(chat_id=config.chat_id.get_secret_value(),
-                                   message_thread_id=message_thread_id, text=formatted_vacancy)
+            vacancy = await bot.send_message(
+                chat_id=config.chat_id.get_secret_value(),
+                message_thread_id=message_thread_id,
+                text=formatted_vacancy
+            )
             last_vacancy_sent = current_time
+            aioschedule.every(2).weeks.do(delete_message, vacancy)
             await state.clear()
             await message.answer("Вакансия успешно опубликована.", reply_markup=main_keyboard())
     else:
@@ -88,6 +93,15 @@ async def process_vacancy(message: types.Message, state: FSMContext):
             "Вакансия не опубликована! Пожалуйста, отправьте вакансию в правильном формате.",
             reply_markup=main_keyboard()
         )
+
+
+async def delete_message(vacancy):
+    chat_id = vacancy.chat.id
+    message_id = vacancy.message_id
+    try:
+        await bot.delete_message(chat_id=chat_id, message_id=message_id)
+    except TelegramBadRequest as e:
+        print(f"Ошибка при удалении сообщения: {e}")
 
 
 @router.message()
