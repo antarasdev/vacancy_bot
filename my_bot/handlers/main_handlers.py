@@ -2,6 +2,7 @@ import asyncio
 
 import aioschedule
 from aiogram import F, Router, types
+from aiogram.enums import ContentType
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters.command import Command
 from aiogram.fsm.context import FSMContext
@@ -12,7 +13,6 @@ from my_bot.config import config
 from my_bot.constants import EXAMPLE, RULES_TEXT, THREAD_KEYWORDS, PRICE
 from my_bot.keyboards import main_keyboard, payment_keyboard
 
-from vacancy_bot.my_bot.constants import PAYMENTS
 
 router = Router()
 
@@ -31,18 +31,36 @@ async def start(message: types.Message):
 
 @router.message(Command("pay"))
 async def process_payment(message: types.Message):
-    if PAYMENTS.split(':')[1] == 'TEST':
+    if config.payments.get_secret_value().split(':')[1] == 'TEST':
         await bot.send_message(message.chat.id, text='ОПЛАТА СУКА РАБОТАЙ')
         await bot.send_invoice(
             message.chat.id,
             title='Тайтл',
             description='Описание',
-            provider_token=PAYMENTS,
+            provider_token=config.payments.get_secret_value(),
             currency='rub',
             is_flexible=False,  # True если конечная цена зависит от способа доставки
             prices=[PRICE],
             start_parameter='time-machine-example',
             payload='some-invoice-payload-for-our-internal-use'
+        )
+
+
+@router.pre_checkout_query()
+async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
+    await bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)
+
+
+@router.message()
+async def process_successful_payment(message: types.Message):
+    print('successful_payment:')
+    payment = message.successful_payment.to_python()
+    for key, val in payment.items():
+        print(f'{key} = {val}')
+    await bot.send_message(
+        message.chat.id,
+        total_amount=message.successful_payment.total_amount // 100,
+        currency=message.successful_payment.currency
         )
 
 
