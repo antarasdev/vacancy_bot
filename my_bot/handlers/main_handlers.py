@@ -7,10 +7,10 @@ from aiogram.filters.command import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-from bot import bot # noqa
-from my_bot.config import config # noqa
-from my_bot.constants import EXAMPLE, RULES_TEXT, THREAD_KEYWORDS # noqa
-from my_bot.keyboards import main_keyboard # noqa
+from bot import bot
+from my_bot.config import config
+from my_bot.constants import EXAMPLE, RULES_TEXT, THREAD_KEYWORDS
+from my_bot.keyboards import main_keyboard
 
 router = Router()
 
