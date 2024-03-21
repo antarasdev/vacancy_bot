@@ -7,10 +7,10 @@ from aiogram.filters.command import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-from bot import bot
-from my_bot.config import config
-from my_bot.constants import EXAMPLE, RULES_TEXT, THREAD_KEYWORDS
-from my_bot.keyboards import main_keyboard
+from bot import bot # noqa
+from my_bot.config import config # noqa
+from my_bot.constants import EXAMPLE, RULES_TEXT, THREAD_KEYWORDS # noqa
+from my_bot.keyboards import main_keyboard # noqa
 
 router = Router()
 
@@ -53,10 +53,10 @@ async def process_vacancy(message: types.Message, state: FSMContext):
     data = message.text
     vacancy_parts = data.split('\n\n')
 
-    hashtags = ([part for part in vacancy_parts if part.startswith("#")])
+    hashtags = [part for part in vacancy_parts if part.startswith("#")]
     name_organisation = [part for part in vacancy_parts if 'Название фирмы' in part]
     responsibilities = [part for part in vacancy_parts if "Требования к кандидату" in part]
-    position = next((part for part in vacancy_parts if "Должность" in part), None)
+    position = [part for part in vacancy_parts if "Должность" in part]
     salary = next((part for part in vacancy_parts if any(word in part.lower() for word in ["зп", "оклад"])), None)
     contacts = [part for part in vacancy_parts if 'Контактные данные' in part]
 
