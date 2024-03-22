@@ -20,6 +20,7 @@ def vacancy_time_keyboard() -> ReplyKeyboardMarkup:
     keyboard.add(types.KeyboardButton(text='2 Недели'))
     keyboard.add(types.KeyboardButton(text='3 Недели'))
     keyboard.add(types.KeyboardButton(text='Месяц'))
+    keyboard.add(types.KeyboardButton(text='Назад'))
 
     keyboard.adjust(2)
     return keyboard.as_markup(resize_keyboard=True)

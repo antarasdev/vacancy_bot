@@ -52,7 +52,7 @@ async def publish_vacancy(message: types.Message, state: FSMContext):
 async def process_vacancy(message: types.Message, state: FSMContext):
     if message.text == 'Назад':
         await state.set_state(None)  # Очищаем состояние, возвращаемся в основное меню
-        await publish_vacancy(message, state)
+        await start(message)
     else:
         selected_time = message.text
         await state.update_data(selected_time=selected_time)
