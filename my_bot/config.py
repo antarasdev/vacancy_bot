@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     bot_token: SecretStr
     chat_id: SecretStr
     admin_id: SecretStr
+    link: SecretStr
     payments: SecretStr
 
     model_config = SettingsConfigDict(

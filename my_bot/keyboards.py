@@ -13,11 +13,21 @@ def main_keyboard() -> ReplyKeyboardMarkup:
     return keyboard.as_markup(resize_keyboard=True)
 
 
-def profile_keyboard() -> ReplyKeyboardMarkup:
+def vacancy_time_keyboard() -> ReplyKeyboardMarkup:
     keyboard = ReplyKeyboardBuilder()
 
-    keyboard.add(types.KeyboardButton(text='Да'))
-    keyboard.add(types.KeyboardButton(text='Нет'))
+    keyboard.add(types.KeyboardButton(text='1 Неделя'))
+    keyboard.add(types.KeyboardButton(text='2 Недели'))
+    keyboard.add(types.KeyboardButton(text='3 Недели'))
+    keyboard.add(types.KeyboardButton(text='Месяц'))
 
     keyboard.adjust(2)
+    return keyboard.as_markup(resize_keyboard=True)
+
+
+def back_button() -> ReplyKeyboardMarkup:
+    keyboard = ReplyKeyboardBuilder()
+
+    keyboard.add(types.KeyboardButton(text='Назад'))
+    keyboard.adjust(1)
     return keyboard.as_markup(resize_keyboard=True)
