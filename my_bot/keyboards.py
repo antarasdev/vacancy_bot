@@ -5,7 +5,7 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder, ReplyKeyboardMarkup
 def main_keyboard() -> ReplyKeyboardMarkup:
     keyboard = ReplyKeyboardBuilder()
 
-    keyboard.add(types.KeyboardButton(text='📑 Шаблон\nвакансии'))
+    keyboard.add(types.KeyboardButton(text='📑 Пример\nвакансии'))
     keyboard.add(types.KeyboardButton(text='📔 Правила\nпубликации'))
     keyboard.add(types.KeyboardButton(text='✅Опубликовать вакансию'))
 

@@ -10,7 +10,7 @@ from aiogram.fsm.state import State, StatesGroup
 
 from bot import bot
 from my_bot.config import config
-from my_bot.constants import EXAMPLE, RULES_TEXT, THREAD_KEYWORDS
+from my_bot.constants import EXAMPLE, RULES_TEXT, THREAD_KEYWORDS, START_MESSAGE
 from my_bot.keyboards import main_keyboard, vacancy_time_keyboard, back_button
 
 router = Router()
@@ -25,20 +25,20 @@ class VacancyForm(StatesGroup):
 
 @router.message(Command("start"))
 async def start(message: types.Message):
-    text = "Добро пожаловать! Я могу помочь вам опубликовать вакансии"
-    await message.answer(text, reply_markup=main_keyboard())
+    text = START_MESSAGE
+    await message.answer(text, reply_markup=main_keyboard(), parse_mode=ParseMode.MARKDOWN_V2)
 
 
-@router.message(lambda message: message.text == '📑 Шаблон\nвакансии')
+@router.message(lambda message: message.text == '📑 Пример\nвакансии')
 async def send_vacancy_example(message: types.Message):
     text = EXAMPLE
-    await message.answer(text)
+    await message.answer(text, parse_mode=ParseMode.MARKDOWN_V2)
 
 
 @router.message(lambda message: message.text == '📔 Правила\nпубликации')
 async def send_rules(message: types.Message):
     text = RULES_TEXT
-    await message.answer(text)
+    await message.answer(text,  parse_mode=ParseMode.MARKDOWN_V2)
 
 
 @router.message(lambda message: message.text == '✅Опубликовать вакансию')
@@ -74,11 +74,12 @@ async def enter_vacancy_text(message: types.Message, state: FSMContext):
         selected_time = (await state.get_data()).get("selected_time")
 
         hashtags = [part for part in vacancy_parts if part.startswith("#")]
-        name_organisation = [part for part in vacancy_parts if 'Название фирмы' in part]
+        name_organisation = [part for part in vacancy_parts if 'Название организации' in part]
         responsibilities = [part for part in vacancy_parts if "Требования к кандидату" in part]
+        conditions = [part for part in vacancy_parts if "Условия работы" in part]
         position = [part for part in vacancy_parts if "Должность" in part]
         salary = next((part for part in vacancy_parts if any(word in part.lower() for word in ["зп", "оклад"])), None)
-        contacts = [part for part in vacancy_parts if 'Контактные данные' in part]
+        contacts = [part for part in vacancy_parts if "Контактные данные" in part]
 
         message_thread_id = None
         for thread_id, keywords in THREAD_KEYWORDS.items():
@@ -90,14 +91,16 @@ async def enter_vacancy_text(message: types.Message, state: FSMContext):
             if message_thread_id:
                 break
 
-        if message_thread_id and responsibilities and salary and position and hashtags and name_organisation and contacts:
+        if (message_thread_id and responsibilities and
+                salary and position and hashtags and
+                name_organisation and contacts):
             if current_time - last_vacancy_sent < 1800:  # 1800 seconds = 30 minutes
                 await message.answer("Вы не можете отправлять вакансии чаще, чем раз в 30 минут.")
             else:
                 formatted_vacancy = (
                     "\n\n".join(hashtags + name_organisation +
                                 position + list(map(str, responsibilities)) +
-                                [salary] + contacts)
+                                conditions + [salary] + contacts)
                 )
                 vacancy = await bot.send_message(
                     chat_id=config.chat_id.get_secret_value(),
