@@ -17,6 +17,8 @@ from my_bot.keyboards import main_keyboard, vacancy_time_keyboard, back_button
 
 router = Router()
 
+last_vacancy_sent = 0
+
 
 class VacancyForm(StatesGroup):
     ConfirmVacancy = State()
@@ -71,8 +73,6 @@ async def enter_vacancy_text(message: types.Message, state: FSMContext):
 
 
 async def process_vacancy_sent(message: types.Message, state: FSMContext):
-    last_vacancy_sent = 0
-    current_time = asyncio.get_event_loop().time()
     data = message.text
     vacancy_parts = data.split('\n\n')
     selected_time = (await state.get_data()).get("selected_time")
@@ -96,8 +96,7 @@ async def process_vacancy_sent(message: types.Message, state: FSMContext):
             name_organisation,
             contacts
     ):
-        await send_vacancy_message(message, state, current_time, last_vacancy_sent,
-                                   selected_time, message_thread_id, hashtags,
+        await send_vacancy_message(message, state, selected_time, message_thread_id, hashtags,
                                    name_organisation, position, responsibilities, conditions, salary, contacts)
     else:
         await message.answer(
@@ -140,8 +139,6 @@ def validate_vacancy_data(
 async def send_vacancy_message(
         message: types.Message,
         state: FSMContext,
-        current_time: float,
-        last_vacancy_sent: float,
         selected_time: str,
         message_thread_id: int,
         hashtags: List[str],
@@ -151,6 +148,8 @@ async def send_vacancy_message(
         conditions: List[str],
         salary: str,
         contacts: List[str]):
+    global last_vacancy_sent
+    current_time = asyncio.get_event_loop().time()
     if current_time - last_vacancy_sent < 1800:  # 1800 seconds = 30 minutes
         await message.answer("Вы не можете отправлять вакансии чаще, чем раз в 30 минут.")
     else:
