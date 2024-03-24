@@ -29,26 +29,26 @@ jobs:
     needs:
       - build_and_push_backend_to_docker_hub
 
-    steps:
-      - name: Executing remote ssh commands to deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          port: ${{ secrets.PORT }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
-            sudo docker-compose stop
-            sudo docker-compose rm vacancy_bot
-
-            rm .env
-            touch .env
-
-            sudo echo BOT_TOKEN=${{ secrets.BOT_TOKEN }} >> .env
-            sudo echo CHAT_ID=${{ secrets.CHAT_ID }} >> .env
-            sudo echo PAYMENTS=${{ secrets.PAYMENTS }} >> .env
-            sudo echo LINK=${{ secrets.LINK }} >> .env
-
-            sudo docker-compose up -d
-            sudo docker system prune -f
+#    steps:
+#      - name: Executing remote ssh commands to deploy
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          port: ${{ secrets.PORT }}
+#          username: ${{ secrets.USER }}
+#          key: ${{ secrets.SSH_KEY }}
+#          script: |
+#            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
+#            sudo docker-compose stop
+#            sudo docker-compose rm vacancy_bot
+#
+#            rm .env
+#            touch .env
+#
+#            sudo echo BOT_TOKEN=${{ secrets.BOT_TOKEN }} >> .env
+#            sudo echo CHAT_ID=${{ secrets.CHAT_ID }} >> .env
+#            sudo echo PAYMENTS=${{ secrets.PAYMENTS }} >> .env
+#            sudo echo LINK=${{ secrets.LINK }} >> .env
+#
+#            sudo docker-compose up -d
+#            sudo docker system prune -f

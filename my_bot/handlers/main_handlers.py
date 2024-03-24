@@ -15,8 +15,6 @@ from my_bot.keyboards import main_keyboard, vacancy_time_keyboard, back_button
 
 router = Router()
 
-last_vacancy_sent = 0
-
 
 class VacancyForm(StatesGroup):
     ConfirmVacancy = State()
@@ -67,7 +65,7 @@ async def enter_vacancy_text(message: types.Message, state: FSMContext):
         await state.set_state(VacancyForm.change_timestamp)
         await publish_vacancy(message, state)
     else:
-        global last_vacancy_sent
+        last_vacancy_sent = 0
         current_time = asyncio.get_event_loop().time()
         data = message.text
         vacancy_parts = data.split('\n\n')
@@ -105,7 +103,7 @@ async def enter_vacancy_text(message: types.Message, state: FSMContext):
                 vacancy = await bot.send_message(
                     chat_id=config.chat_id.get_secret_value(),
                     message_thread_id=message_thread_id,
-                    text=formatted_vacancy
+                    text=formatted_vacancy,
                 )
                 last_vacancy_sent = current_time
                 if selected_time == 'Месяц':
