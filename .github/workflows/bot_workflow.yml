@@ -31,7 +31,7 @@ jobs:
 
     steps:
       - name: Executing remote ssh commands to deploy
-        uses: actions/checkout@v2
+        uses: appleboy/ssh-action@master
         with:
           username: ${{ secrets.USER }}
           host: ${{ secrets.HOST }}
@@ -48,6 +48,8 @@ jobs:
             sudo echo CHAT_ID=${{ secrets.CHAT_ID }} >> .env
             sudo echo PAYMENTS=${{ secrets.PAYMENTS }} >> .env
             sudo echo LINK=${{ secrets.LINK }} >> .env
-                        
-            sudo docker-compose up -d --build
+            
+            cd .
+            
+            sudo docker-compose -f infra/docker-compose.yml up -d
             sudo docker system prune -f
