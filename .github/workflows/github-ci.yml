@@ -33,6 +33,7 @@ jobs:
       - name: Executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
         with:
+          context: ./bot
           username: ${{ secrets.USER }}
           host: ${{ secrets.HOST }}
           port: ${{ secrets.PORT }}
