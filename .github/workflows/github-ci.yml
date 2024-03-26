@@ -42,7 +42,6 @@ jobs:
             sudo docker-compose stop
             sudo docker-compose rm vacancy_bot
 
-            rm .env
             touch .env
 
             sudo echo BOT_TOKEN=${{ secrets.BOT_TOKEN }} >> .env
