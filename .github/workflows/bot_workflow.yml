@@ -3,7 +3,7 @@ name: Vacancy_bot workflow
 on: [push]
 
 jobs:
-  build_and_push_backend_to_docker_hub:
+  build_and_push_bot_to_docker_hub:
     name: Pushing backend image to Docker Hub
     runs-on: ubuntu-latest
     steps:
