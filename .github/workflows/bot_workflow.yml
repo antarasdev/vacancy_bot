@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build_and_push_bot_to_docker_hub:
-    name: Pushing backend image to Docker Hub
+    name: Pushing bot image to Docker Hub
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -19,7 +19,7 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/build-push-action@v2
         with:
-          context: ./bot
+          context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
 
