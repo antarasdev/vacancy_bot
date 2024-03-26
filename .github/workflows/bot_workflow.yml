@@ -27,7 +27,7 @@ jobs:
     name: Deploying on remote server
     runs-on: ubuntu-latest
     needs:
-      - build_and_push_backend_to_docker_hub
+      - build_and_push_bot_to_docker_hub
 
     steps:
       - name: Executing remote ssh commands to deploy
@@ -39,9 +39,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
-            sudo docker-compose stop
-            sudo docker-compose rm vacancy_bot
-
+            
             touch .env
 
             sudo echo BOT_TOKEN=${{ secrets.BOT_TOKEN }} >> .env
