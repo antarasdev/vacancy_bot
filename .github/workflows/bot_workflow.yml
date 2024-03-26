@@ -48,8 +48,6 @@ jobs:
             sudo echo CHAT_ID=${{ secrets.CHAT_ID }} >> .env
             sudo echo PAYMENTS=${{ secrets.PAYMENTS }} >> .env
             sudo echo LINK=${{ secrets.LINK }} >> .env
-            
-            cd vacancy_bot
-            
-            sudo docker-compose up -d
+                        
+            sudo docker-compose up -d --build
             sudo docker system prune -f
