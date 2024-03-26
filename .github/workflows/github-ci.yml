@@ -30,6 +30,9 @@ jobs:
       - build_and_push_backend_to_docker_hub
 
     steps:
+      - name: Copy docker-compose.yml
+        run: cp docker-compose.yml $GITHUB_WORKSPACE/docker-compose.yml
+
       - name: Executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
         with:
@@ -49,5 +52,5 @@ jobs:
             sudo echo PAYMENTS=${{ secrets.PAYMENTS }} >> .env
             sudo echo LINK=${{ secrets.LINK }} >> .env
 
-            sudo docker-compose -f docker-compose.yml up -d
+            sudo docker-compose up -d
             sudo docker system prune -f
