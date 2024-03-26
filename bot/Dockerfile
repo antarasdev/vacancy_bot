@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-WORKDIR /vacancy_bot
+WORKDIR /bot
 
 COPY requirements.txt .
 
