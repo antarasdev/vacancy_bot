@@ -51,7 +51,10 @@ async def publish_vacancy(message: types.Message, state: FSMContext):
 
 
 @router.message(VacancyForm.change_timestamp)
-async def process_vacancy(message: types.Message, state: FSMContext):
+async def process_vacancy(
+        message: types.Message,
+        state: FSMContext
+):
     if message.text == 'Назад':
         await state.set_state(None)  # Очищаем состояние, возвращаемся в основное меню
         await start(message)
@@ -64,7 +67,10 @@ async def process_vacancy(message: types.Message, state: FSMContext):
 
 
 @router.message(VacancyForm.ConfirmVacancy)
-async def enter_vacancy_text(message: types.Message, state: FSMContext):
+async def enter_vacancy_text(
+        message: types.Message,
+        state: FSMContext
+):
     if message.text == 'Назад':
         await state.set_state(VacancyForm.change_timestamp)
         await publish_vacancy(message, state)
@@ -72,7 +78,10 @@ async def enter_vacancy_text(message: types.Message, state: FSMContext):
         await process_vacancy_sent(message, state)
 
 
-async def process_vacancy_sent(message: types.Message, state: FSMContext):
+async def process_vacancy_sent(
+        message: types.Message,
+        state: FSMContext
+):
     data = message.text
     vacancy_parts = data.split('\n\n')
     selected_time = (await state.get_data()).get("selected_time")
