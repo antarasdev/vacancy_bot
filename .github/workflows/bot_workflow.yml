@@ -49,7 +49,7 @@ jobs:
             sudo echo PAYMENTS=${{ secrets.PAYMENTS }} >> .env
             sudo echo LINK=${{ secrets.LINK }} >> .env
             
-            cd .
+            cd vacancy_bot/
             
             sudo docker-compose -f infra/docker-compose.yml up -d
             sudo docker system prune -f
