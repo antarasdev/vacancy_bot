@@ -110,7 +110,7 @@ async def process_vacancy_sent(
     else:
         await message.answer(
             "Вакансия не опубликована! Пожалуйста, отправьте вакансию в правильном формате.",
-            reply_markup=main_keyboard()
+            reply_markup=back_button()
         )
 
 
