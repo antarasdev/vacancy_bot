@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with: ${{ github.repository }}
+        with: babyshitt/vacancy_bot
 
       - name: Executing remote ssh commands to deploy
         run: |
