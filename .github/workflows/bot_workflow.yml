@@ -1,6 +1,9 @@
 name: Vacancy_bot workflow
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build_and_push_bot_to_docker_hub:
@@ -23,35 +26,29 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
 
-  on:
-    push:
-      branches:
-        - main
+  deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - build_and_push_bot_to_docker_hub
 
-  jobs:
-    deploy:
-      runs-on: ubuntu-latest
-      needs:
-        - build_and_push_bot_to_docker_hub
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
-
-        - name: Executing remote ssh commands to deploy
-          run: |
-            ssh ${{ secrets.USER }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -i ${{ secrets.SSH_KEY }} << 'EOF'
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
-            sudo docker-compose stop
-            sudo docker-compose rm vacancy_bot
-
-            touch .env
-
-            echo BOT_TOKEN=${{ secrets.BOT_TOKEN }} >> .env
-            echo CHAT_ID=${{ secrets.CHAT_ID }} >> .env
-            echo PAYMENTS=${{ secrets.PAYMENTS }} >> .env
-            echo LINK=${{ secrets.LINK }} >> .env
-
-            sudo docker-compose up -d
-            sudo docker system prune -f
-            EOF
+      - name: Executing remote ssh commands to deploy
+        run: |
+          ssh ${{ secrets.USER }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -i ${{ secrets.SSH_KEY }} << 'EOF'
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
+          sudo docker-compose stop
+          sudo docker-compose rm vacancy_bot
+          
+          touch .env
+          
+          echo BOT_TOKEN=${{ secrets.BOT_TOKEN }} >> .env
+          echo CHAT_ID=${{ secrets.CHAT_ID }} >> .env
+          echo PAYMENTS=${{ secrets.PAYMENTS }} >> .env
+          echo LINK=${{ secrets.LINK }} >> .env
+          
+          sudo docker-compose up -d
+          sudo docker system prune -f
+          EOF
