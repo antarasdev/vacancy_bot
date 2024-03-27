@@ -6,4 +6,4 @@ services:
     container_name: vacancy_bot
     restart: always
     env_file:
-      - ./.env
+      - bot/.env
