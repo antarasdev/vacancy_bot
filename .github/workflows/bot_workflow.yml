@@ -37,8 +37,6 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
-            sudo docker-compose stop
-            sudo docker-compose rm vacancy_bot
 
       - name: docker-compose up
         uses: appleboy/ssh-action@master
@@ -48,6 +46,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
+            sudo docker-compose stop
+            sudo docker-compose rm vacancy_bot
             cd infra/
             sudo touch .env    
             touch .env
