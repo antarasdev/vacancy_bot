@@ -24,26 +24,31 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
 
   deploy:
-    if: ${{ github.ref }} == 'main'
-    name: Deploying on remote server
+    if: ${{ github.ref }} == 'master'
     runs-on: ubuntu-latest
-    needs:
-      - build_and_push_bot_to_docker_hub
-
+    needs: build_and_push_to_docker_hub
     steps:
-      - name: Executing remote ssh commands to deploy
+      - name: pull docker image
         uses: appleboy/ssh-action@master
         with:
-          username: ${{ secrets.USER }}
           host: ${{ secrets.HOST }}
-          port: ${{ secrets.PORT }}
+          username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd infra/
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
             sudo docker-compose stop
             sudo docker-compose rm vacancy_bot
-            
+      - name: docker-compose up
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            cd infra/
+            sudo touch .env    
             touch .env
 
             sudo echo BOT_TOKEN=${{ secrets.BOT_TOKEN }} >> .env
