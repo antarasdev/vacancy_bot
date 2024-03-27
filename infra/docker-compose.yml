@@ -1,0 +1,9 @@
+version: '3.9'
+services:
+
+  vacancy_bot:
+    image: babyshit/vacancy-bot:latest
+    container_name: vacancy_bot
+    restart: always
+    env_file:
+      - bot/.env
