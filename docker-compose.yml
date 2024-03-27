@@ -1,9 +1,10 @@
 version: '3.4'
-
 services:
-  vacancy_bot:
-    image: babyshit/vacancy-bot:v1.0
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: vacancy_bot
-    restart: always
     env_file:
       - bot/.env
