@@ -37,19 +37,11 @@ jobs:
           host: ${{ secrets.HOST }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSH_KEY }}
+          context: ./infra
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
             sudo docker-compose stop
             sudo docker-compose rm vacancy_bot
-      - name: Docker compose up
-        uses: appleboy/ssh-action@master
-        with:
-          username: ${{ secrets.USER }}
-          host: ${{ secrets.HOST }}
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          context: ./infra
-          script: |
             
             touch .env
 
