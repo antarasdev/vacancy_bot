@@ -37,7 +37,7 @@ jobs:
 
       - name: Executing remote ssh commands to deploy
         run: |
-          ssh ${{ secrets.USER }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} -i ${{ secrets.SSH_KEY }} << 'EOF'
+          ssh ${{ secrets.USER }}@${{ secrets.HOST }} -p ${{ secrets.PORT }} 
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/vacancy-bot:v1.0
           sudo docker-compose stop
           sudo docker-compose rm vacancy_bot
